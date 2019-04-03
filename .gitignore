@@ -1,0 +1,10 @@
+#  Do not track the following files
+
+.DS_Store/
+.vscode/
+CMakeFiles/
+*.o
+cmake_install.cmake
+CMakeCache.txt
+Makefile
+
