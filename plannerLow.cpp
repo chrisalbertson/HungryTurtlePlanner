@@ -51,14 +51,14 @@
 
 // ObstacleList obstacles;
 
-void plannerLow::bestPath(unsigned depth, point_t pathStart, point_t *pathTarget, unsigned *score){
+void plannerLow::bestPath(unsigned depth, point_t pathStart, point_t *pathTarget, float *score){
 
     // To prevent infinate recurion a depth limit is enforced.
     // At the depth limit we return with the target point set to
     // the start point, which means "do not move" and we return a very
     // poor score.
     if (depth == depthLimit) {
-        *score = 100;
+        *score = 100.0;
         *pathTarget = pathStart;
         return;
     }
@@ -74,23 +74,25 @@ void plannerLow::bestPath(unsigned depth, point_t pathStart, point_t *pathTarget
 
     if (obsCount == 0) {
 
-        // Looks like we reached the goal.  Set the score based on the
-        // number of steps it took to get there.
-        *score = depthLimit - depth;
+        // Looks like we can reach the goal on one shot. A "straight shot"
+        // score is zero
+        *score += 0.0;
         // *pathTarget to remain unchanged, We can reach it directly
 
     }
     else {
-        unsigned                s;
-        std::vector<unsigned>   sVec;
 
-        point_t                 endPt;
-        std::vector<point_t>    endPtVec;
+        // One or more obstacles is in the way between the robot and the goal.  
+        // In this case we compute the score based on the fraction of the 
+        // distance to the goal we can drive.   We need the total distance
+        // so that we can compute the fractions later.
+        float distStartToGoal = bg::distance(pathStart, *pathTarget);
+        std::vector<point_t> osbEndPtVec;
 
         // For each obstacle between curent location and the goal we
-        // check each obstacle-endpoint to see if the path to the goal
-        // is available.  Then we choose the endpoint with the best score
-        // and return that as the new "target location".
+        // check each obstacle-endpoint to see if we can drive directly to it.
+        // We only concider obstacles that are not blocked by other obstacles.
+        // we collect a vector of end points
         BOOST_FOREACH(value_t obs, obsVec) {
 
             linestring_t ls = *(obs.second);
@@ -103,39 +105,33 @@ void plannerLow::bestPath(unsigned depth, point_t pathStart, point_t *pathTarget
             // extend the obstacle (at p1 end) by 1/2 the vehicle width
             obsSlope = getSlope(p2, p1);
             makeLineEndPt(obsSlope, pathOffset, p1, &extendedPt);
+            osbEndPtVec.push_back(extendedPt);
 
-            // do this: "endPt = pathTarget;   TODO: write a macro for this
-            bg::set<0>(endPt, bg::get<0>(*pathTarget));
-            bg::set<1>(endPt, bg::get<1>(*pathTarget));
-
-            bestPath(depth+1, p1,  &endPt, &s);
-            sVec.push_back(s);
-            endPtVec.push_back(endPt);
-
-
-
-            // extend the obstacle (at P2 end) by 1/2 the vehicle width
-            obsSlope = getSlope(p1, p2);
-            makeLineEndPt(obsSlope, pathOffset, p2, &extendedPt);
-
-
-
-            // do this: "endPt = pathTarget;   TODO: write a macro for this
-            bg::set<0>(endPt, bg::get<0>(*pathTarget));
-            bg::set<1>(endPt, bg::get<1>(*pathTarget));
-
-            bestPath(depth+1, p2,  &endPt, &s);
-            sVec.push_back(s);
-            endPtVec.push_back(endPt);
+            // extend the obstacle (at p1 end) by 1/2 the vehicle width
+            obsSlope = getSlope(p2, p1);
+            makeLineEndPt(obsSlope, pathOffset, p1, &extendedPt);
+            osbEndPtVec.push_back(extendedPt);
         }
 
-        // which of the above has the best score?  
-        // We will return the point with the best score.
-        //
-        //
-        // TODO                   <<<<<<<<<<<<<<<<<<<<< more to be done....
-        // TODO *score = 
-        // TODO *pathTarget =
+        // osbEndPtVec now holds the vector of points we can directly
+        // drive to.   Next we choose the point that puts us in the
+        // best place relative to the goal.
+        float s;
+        float sMin = 9E20f;  // initialize to impossibly large value
+        point_t ptMin;
+        BOOST_FOREACH(point_t pt, osbEndPtVec){
+            float distToGo = bg::distance(pt, pathTarget);
+            //TODO: Need to "look" if path is blocked and compute a more
+            // meaningful score.  But for now this much just might work
+            // let's try and see...
+            s = distToGo / distStartToGoal;  // this is the "score"
+            if (s < sMin){
+                sMin = s;
+                bg::assign_point(ptMin, pt);
+            }
+        }
+        *score = sMin; 
+        bg::assign_point(*pathTarget, ptMin);
     }
 return;
 }

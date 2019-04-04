@@ -60,7 +60,7 @@ public:
     // allow a comlete solution.  and in the process of moving more data will be
     // collected and we based future planning on this new data.
 
-    void bestPath(unsigned depth, point_t pathStart,point_t *pathTarget, unsigned *score);
+    void bestPath(unsigned depth, point_t pathStart,point_t *pathTarget, float *score);
 
 private:
     unsigned depthLimit;
