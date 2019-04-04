@@ -62,9 +62,15 @@ float getSlope(point_t pt1, point_t pt2){
     float rise;
     float run;
 
-    rise = pt2.get<0>() - pt1.get<0>();
-    run  = pt2.get<1>() - pt1.get<1>();
-    return (rise/run);
+    run  = pt2.get<0>() - pt1.get<0>();
+    rise = pt2.get<1>() - pt1.get<1>();
+
+    if (0.0 == run) {
+        return 1E20f;  // Any big number will do
+    }
+    else {
+        return (rise/run);
+    }
 }
 
 

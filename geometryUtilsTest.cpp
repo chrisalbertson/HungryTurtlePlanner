@@ -1,19 +1,19 @@
-#include "geometryUtils.cpp"
-#include <gtest/gtest.h>
+// geometryUtilsTest.cpp  - Unit test using Boost Test
+#include "geometryUtils.h"
 
-TEST(getSlopeTest, normalSlopes) {
-    EXPECT_EQ( 1.0, getSlope(point_t(1.0, 1.0),point_t( 2.0, 2.0)));
-    EXPECT_EQ(-1.0, getSlope(point_t(0.0, 0.0),point_t(-1.0, 1.0)));
-    EXPECT_EQ( 2.0, getSlope(point_t(0.0, 0.0),point_t( 1.0, 2.0)));
-    EXPECT_EQ( 0.5, getSlope(point_t(0.0, 0.0),point_t( 2.0, 1.0)));
-}
+#define BOOST_TEST_MODULE test module name
+#include <boost/test/included/unit_test.hpp>
 
-TEST(getSlopeTest, horzVertSlopes) {
-    EXPECT_EQ(       0.0, getSlope(point_t(1.0, 1.0),point_t( 1.0, 0.0)));
-    EXPECT_EQ(10000000.0, getSlope(point_t(0.0, 0.0),point_t( 0.0, 1.0)));
-}
+BOOST_AUTO_TEST_CASE( getSlopeTest )
+{
+    BOOST_CHECK_EQUAL(  0.5, getSlope(point_t( 1.0,  1.0),point_t(  3.0,  2.0)) );
+    BOOST_CHECK_EQUAL( -0.5, getSlope(point_t(-1.0,  1.0),point_t( -3.0,  2.0)) );
+    BOOST_CHECK_EQUAL(  2.0, getSlope(point_t(-1.0, -1.0),point_t( -2.0, -3.0)) );
+    BOOST_CHECK_EQUAL( -2.0, getSlope(point_t( 1.0, -1.0),point_t(  2.0, -3.0)) );
 
-int main(int argc, char **argv) {
-    testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
+    BOOST_CHECK_EQUAL(  0.5, getSlope(point_t( 3.0,  2.0),point_t(  1.0,  1.0)) );
+    BOOST_CHECK_EQUAL( -0.5, getSlope(point_t(-3.0,  2.0),point_t( -1.0,  1.0)) );
+
+    BOOST_CHECK      ( 10000.0 <  getSlope(point_t( 2.0, 1.0),point_t(  2.0, 8.0)) );
+    BOOST_CHECK_EQUAL(     0.0,   getSlope(point_t( 1.0, 1.0),point_t(  8.0, 1.0)) );
 }
