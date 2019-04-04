@@ -1,5 +1,6 @@
+#include "plannerLow.h"
+#include "obstacles.h"
 #include "geometryUtils.h"
-
 
 
 // This planner works at the lowest level.  It is assumed there is a
@@ -48,7 +49,9 @@
 // allow a comlete solution.  and in the process of moving more data will be
 // collected and we based future planning on this new data.
 
-void plannerLow::bestPath(unsigned depth, point_t pathStart,point_t *pathTarget, unsigned *score){
+// ObstacleList obstacles;
+
+void plannerLow::bestPath(unsigned depth, point_t pathStart, point_t *pathTarget, unsigned *score){
 
     // To prevent infinate recurion a depth limit is enforced.
     // At the depth limit we return with the target point set to
@@ -64,12 +67,12 @@ void plannerLow::bestPath(unsigned depth, point_t pathStart,point_t *pathTarget,
     // path and look for obstatcles that fall into this rectagagle.
     // If the path is clear, we return this path and a high score.
     polygon_t pathPoly;
-    makeRectAroundSegment(pathStart, pathTarget, vehicleWidth, &pathPoly);
-
+    makeRectAroundSegment(pathStart, *pathTarget, vehicleWidth, &pathPoly);
+    
     std::vector<value_t> obsVec;
-    obsCount = getInPolygon(pathPoly, &obsVec);
+    unsigned obsCount = obstacles->getInPolygon(pathPoly, &obsVec);
 
-    if (obsCout == 0) {
+    if (obsCount == 0) {
 
         // Looks like we reached the goal.  Set the score based on the
         // number of steps it took to get there.
@@ -82,7 +85,7 @@ void plannerLow::bestPath(unsigned depth, point_t pathStart,point_t *pathTarget,
         std::vector<unsigned>   sVec;
 
         point_t                 endPt;
-        std::vector<point_t>    endPtVex;
+        std::vector<point_t>    endPtVec;
 
         // For each obstacle between curent location and the goal we
         // check each obstacle-endpoint to see if the path to the goal
@@ -99,31 +102,40 @@ void plannerLow::bestPath(unsigned depth, point_t pathStart,point_t *pathTarget,
 
             // extend the obstacle (at p1 end) by 1/2 the vehicle width
             obsSlope = getSlope(p2, p1);
-            makeLineEndPt(obsSlope, pathOffset, p1, &extendedPt)
+            makeLineEndPt(obsSlope, pathOffset, p1, &extendedPt);
 
-            endPt = pathTarget;
+            // do this: "endPt = pathTarget;   TODO: write a macro for this
+            bg::set<0>(endPt, bg::get<0>(*pathTarget));
+            bg::set<1>(endPt, bg::get<1>(*pathTarget));
+
             bestPath(depth+1, p1,  &endPt, &s);
-            sVec.append(s);
-            endPtVec.append(endPt);
+            sVec.push_back(s);
+            endPtVec.push_back(endPt);
 
 
 
             // extend the obstacle (at P2 end) by 1/2 the vehicle width
             obsSlope = getSlope(p1, p2);
-            makeLineEndPt(obsSlope, pathOffset, p2, &extendedPt)
+            makeLineEndPt(obsSlope, pathOffset, p2, &extendedPt);
 
 
 
-            endPt = pathTarget;
+            // do this: "endPt = pathTarget;   TODO: write a macro for this
+            bg::set<0>(endPt, bg::get<0>(*pathTarget));
+            bg::set<1>(endPt, bg::get<1>(*pathTarget));
+
             bestPath(depth+1, p2,  &endPt, &s);
-            sVec.append(s);
-            endPtVec.append(endPt);
+            sVec.push_back(s);
+            endPtVec.push_back(endPt);
         }
 
         // which of the above has the best score?  
-        // We will return the point with thebest score
-        *score = 
-        *pathTarget =
+        // We will return the point with the best score.
+        //
+        //
+        // TODO                   <<<<<<<<<<<<<<<<<<<<< more to be done....
+        // TODO *score = 
+        // TODO *pathTarget =
     }
 return;
 }

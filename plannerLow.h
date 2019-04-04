@@ -4,11 +4,14 @@
 #include "geometryUtils.h"
 #include "obstacles.h"
 
+
 class plannerLow {
 public:
     plannerLow(){
         depthLimit   = 3;
         vehicleWidth = 1.0;  // meters.  TODO: use the real value
+
+        obstacles = new(ObstacleList);
     }
 
     // This planner works at the lowest level.  It is assumed there is a
@@ -64,7 +67,7 @@ private:
     point_t curentLocation;
     point_t targetLocation;
 
-    ObstacleList obstacles;
+    ObstacleList *obstacles;
 
     unsigned vehicleWidth;
 };

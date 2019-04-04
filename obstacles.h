@@ -6,7 +6,7 @@
 
 class ObstacleList {
 public:
-    ObstacleList();
+    ObstacleList(){};
 
     void add(point_t p1, point_t p2);
 

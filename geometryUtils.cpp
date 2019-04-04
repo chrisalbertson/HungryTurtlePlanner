@@ -70,17 +70,16 @@ float getSlope(point_t pt1, point_t pt2){
 
 void makeRectAroundSegment(point_t pt1, point_t pt2, float width, polygon_t *rect){
 
-    polygon_t rect;
     float slope = getSlope(pt1, pt2);
     point_t v1;
     point_t v2;
     point_t v3;
     point_t v4;
 
-    makeLineSegment(slope, width, pt1, *v1, *v2);
-    makeLineSegment(slope, width, pt2, *v4, *v3);
+    makeSegmentFromMidPt(slope, width, pt1, &v1, &v2);
+    makeSegmentFromMidPt(slope, width, pt2, &v4, &v3);
 
-    // claer of the ploygon (just in case) then att the four corners.
+    // clear of the ploygon (just in case) then att the four corners.
     // TODO: figure out of the starting point needs to be repeated at the end.
     //       Do we need to append v1 again?
     rect->clear();

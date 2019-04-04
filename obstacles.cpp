@@ -1,4 +1,4 @@
-#include "geometryUtils.h"
+#include "obstacles.h"
 
 // This class uses a large STATIC data structure to hold a reperesentation
 // of obstacles in the real world.   All uses of this class will be seeing
@@ -61,7 +61,7 @@ unsigned ObstacleList::getInPolygon(polygon_t boundingPoly,
     _rtree.query(bgi::intersects(boundingPoly), 
                     std::back_inserter(*result_vec));
 
-    return result_vec->size()
+    return result_vec->size();
 }
 
 void ObstacleList::printInPolygon(polygon_t boundingPoly){
