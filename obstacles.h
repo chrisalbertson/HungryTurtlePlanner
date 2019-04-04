@@ -1,3 +1,11 @@
+/*! \file o     bstacles.h
+    \brief      Defines defines a class to maintain a list of physical obstacles.
+    \author     Chris Albertson
+    
+    Details are TBD.
+*/
+
+
 #ifndef OBSTACKES_H
 #define OBSTACKES_H
 

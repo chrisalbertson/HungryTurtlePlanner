@@ -1,3 +1,11 @@
+/*! \file       PlannerLow.h
+    \brief      Defines a class used to plan short distance routes that avoid observed obstacles.
+    \author     Chris Albertson
+    
+    Details are TBD.
+*/
+
+
 #ifndef PLANNERLOW_H
 #define PLANNERLOW_H
 

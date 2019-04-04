@@ -1,4 +1,13 @@
+/*! \file       obstacles.cpp
+    \brief      Implements funtions defined in obstacles.h.
+    \author     Chris Albertson
+    
+    Details are TBD.
+*/
+
+
 #include "obstacles.h"
+
 
 // This class uses a large STATIC data structure to hold a reperesentation
 // of obstacles in the real world.   All uses of this class will be seeing

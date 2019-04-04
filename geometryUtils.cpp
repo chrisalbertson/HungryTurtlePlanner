@@ -1,3 +1,10 @@
+/*! \file       geometryUtils.cpp
+    \brief      Implements funtions defined in geometryUtils.h.
+    \author     Chris Albertson
+    
+    Details are TBD.
+*/
+
 
 #include "geometryUtils.h"
 

@@ -1,4 +1,10 @@
-// geometryUtilsTest.cpp  - Unit test using Boost Test
+/*! \file       geometryUtilsTest.h
+    \brief      Defines unit tests for geometryUtils using Boost Test.
+    \author     Chris Albertson
+    
+    Details are TBD.
+*/
+
 #include "geometryUtils.h"
 
 #define BOOST_TEST_MODULE test module name

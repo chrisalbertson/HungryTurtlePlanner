@@ -1,3 +1,11 @@
+/*! \file       driver.cpp
+    \brief      Provides a "main()" to facilitate testing the plannerLow class.
+    \author     Chris Albertson
+    
+    Details are TBD.
+*/
+
+
 #include "plannerLow.h"
 
 int main() {

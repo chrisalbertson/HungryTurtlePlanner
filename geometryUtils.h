@@ -1,3 +1,11 @@
+/*! \file       geometryUtils.h
+    \brief      Defines various utilty funtions and types from Boost Geometry.
+    \author     Chris Albertson
+    
+    Details are TBD.
+*/
+
+
 #ifndef GEOMETRYUTILS_H
 #define GEOMETRYUTILS_H
 
@@ -26,7 +34,14 @@ typedef bg::model::linestring<point_t> linestring_t;
 typedef boost::shared_ptr<linestring_t> shp_t;
 typedef std::pair<box_t, shp_t> value_t;
 
+
 void slopeDist2Cartsian(float slope, float length, float* x, float* y);
+/*! 
+    Converts a slope and distance to (x,y).
+
+    Note that "slope and distance" is different from the more common kind of
+    polar coordinate which is angle and distance.
+*/
 
 void makeSegmentFromMidPt(float slope, float length, point_t midPt, 
                           point_t *pt1, point_t *pt2);

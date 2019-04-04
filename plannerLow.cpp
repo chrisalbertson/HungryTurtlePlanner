@@ -1,3 +1,11 @@
+/*! \file       plannerLow.cpp
+    \brief      Implements funtions defined in plannerLow.h.
+    \author     Chris Albertson
+    
+    Details are TBD.
+*/
+
+
 #include "plannerLow.h"
 #include "obstacles.h"
 #include "geometryUtils.h"
