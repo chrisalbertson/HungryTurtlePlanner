@@ -57,7 +57,7 @@ void makeLineEndPt(float slope, float length, point_t startPt, point_t *endPt){
     float x;
     float y;
     
-    slopeDist2Cartsian(slope, length/2.0, &x, &y);
+    slopeDist2Cartsian(slope, length, &x, &y);
 
     // set return values
     endPt->set<0>(startX + x);
