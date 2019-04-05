@@ -18,6 +18,10 @@ public:
 
     void add(point_t p1, point_t p2);
 
+    unsigned getCount();
+
+    //unsigned getAll(std::vector<value_t> *result_vec)
+
     void printInBox(box_t boundingBox);
 
     unsigned getInPolygon(polygon_t boundingPoly, 

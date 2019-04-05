@@ -34,9 +34,13 @@ void ObstacleList::add(point_t p1, point_t p2){
     bg::append(*ls, p1); 
     bg::append(*ls, p2);
 
-    // Add the linestring and an box used as its index
+    // Add the linestring and a box used as its index
     box_t boundingBox = bg::return_envelope<box_t>(*ls);
     _rtree.insert(std::make_pair(boundingBox, ls));
+}
+
+unsigned ObstacleList::getCount(){
+    return _rtree.size();
 }
 
 void ObstacleList::printInBox(box_t boundingBox){

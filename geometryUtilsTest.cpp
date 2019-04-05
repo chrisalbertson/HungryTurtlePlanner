@@ -1,4 +1,4 @@
-/*! \file       geometryUtilsTest.h
+/*! \file       geometryUtilsTest.cpp
     \brief      Defines unit tests for geometryUtils using Boost Test.
     \author     Chris Albertson
     
@@ -7,10 +7,10 @@
 
 #include "geometryUtils.h"
 
-#define BOOST_TEST_MODULE test module name
+#define BOOST_TEST_MODULE  geometryUtils test module
 #include <boost/test/included/unit_test.hpp>
 
-BOOST_AUTO_TEST_SUITE(geometryUtils)
+BOOST_AUTO_TEST_SUITE(geometryUtilsSuite)
 
 BOOST_AUTO_TEST_CASE( getSlopeTest )
 {
