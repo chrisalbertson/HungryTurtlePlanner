@@ -5,10 +5,10 @@
     Details are TBD.
 */
 
-
+#include <math.h>
 #include "geometryUtils.h"
 
-void slopeDist2Cartsian(float slope, float length, float* x, float* y){
+void slopeDist2Cartsian(float slope, float distance, float* x, float* y){
 
     
     float h = 0.0;
@@ -18,16 +18,16 @@ void slopeDist2Cartsian(float slope, float length, float* x, float* y){
     // Look for the special cases of a vertical or horizontal line
     if ( slope > 100000.0){
         // the slope is vertical
-        v = length;
+        v = distance;
     }
-    else if (slope < 0.000001){
+    else if (fabs(slope) < 0.000001){
         // the slope is horizontal
-        h = length;
+        h = distance;
     }
     else {
         angle = atan(slope);
-        h = cos(angle) * (length);
-        v = sin(angle) * (length);
+        h = cos(angle) * (distance);
+        v = sin(angle) * (distance);
     }
     *x = h;
     *y = v;
@@ -83,7 +83,7 @@ float getSlope(point_t pt1, point_t pt2){
 
 void makeRectAroundSegment(point_t pt1, point_t pt2, float width, polygon_t *rect){
 
-    float slope = getSlope(pt1, pt2);
+    float slope = -1.0 / getSlope(pt1, pt2); // slope of end segments
     point_t v1;
     point_t v2;
     point_t v3;
@@ -92,8 +92,8 @@ void makeRectAroundSegment(point_t pt1, point_t pt2, float width, polygon_t *rec
     makeSegmentFromMidPt(slope, width, pt1, &v1, &v2);
     makeSegmentFromMidPt(slope, width, pt2, &v4, &v3);
 
-    // clear of the ploygon (just in case) then att the four corners.
-    // TODO: figure out of the starting point needs to be repeated at the end.
+    // clear of the ploygon (just in case) then add the four corners.
+    // TODO: figure out if the starting point needs to be repeated at the end.
     //       Do we need to append v1 again?
     rect->clear();
     bg::append(rect->outer(), v1);
@@ -101,3 +101,27 @@ void makeRectAroundSegment(point_t pt1, point_t pt2, float width, polygon_t *rec
     bg::append(rect->outer(), v3);
     bg::append(rect->outer(), v4);
 }   
+
+// assuma a line AB.  If you stand on A and loob at B is point C to the left?
+// returns 1 if C is left, -1 if C is to the right
+//
+// The expression is zero if the point is colinear and is treated as being
+// "not to the left" and -1 is returned
+bool isLeft(point_t a, point_t b, point_t c) {
+
+    float Ax = a.get<0>();
+    float Ay = a.get<1>();
+    float Bx = b.get<0>();
+    float By = b.get<1>();
+    float Cx = c.get<0>();
+    float Cy = c.get<1>();
+
+    float location = (Bx - Ax) * (Cy - Ay) - (By - Ay) * (Cx - Ax);
+
+    if (location > 0.0) {
+        return 1;
+    }
+    else {
+        return 0;
+    }
+}

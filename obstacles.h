@@ -1,4 +1,4 @@
-/*! \file o     bstacles.h
+/*! \file       obstacles.h
     \brief      Defines defines a class to maintain a list of physical obstacles.
     \author     Chris Albertson
     
@@ -6,14 +6,17 @@
 */
 
 
-#ifndef OBSTACKES_H
-#define OBSTACKES_H
+#ifndef OBSTACLES_H
+#define OBSTACLES_H
 
 
 #include "geometryUtils.h"
 
 class ObstacleList {
 public:
+
+    // static bgi::rtree< value_t, bgi::linear<16, 4> > _rtree;
+
     ObstacleList(){};
 
     void add(point_t p1, point_t p2);
@@ -31,8 +34,8 @@ public:
 
     void printNearPoint(point_t referencePoint, unsigned count);
 
-private:
-    bgi::rtree< value_t, bgi::linear<16, 4> > _rtree; 
+// private:
+    static bgi::rtree< value_t, bgi::linear<16, 4> > _rtree; 
 };
 
 #endif /* OBSTACKES_H */

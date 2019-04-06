@@ -106,19 +106,19 @@ void plannerLow::bestPath(unsigned depth, point_t pathStart, point_t *pathTarget
             linestring_t ls = *(obs.second);
             point_t p1 = ls.front();
             point_t p2 = ls.back();
-            float obsSlope;
-            point_t extendedPt;
-            float pathOffset = 0.55 * vehicleWidth; // just over 1/2. 
+            point_t extendedPt; 
 
             // extend the obstacle (at p1 end) by 1/2 the vehicle width
-            obsSlope = getSlope(p2, p1);
-            makeLineEndPt(obsSlope, pathOffset, p1, &extendedPt);
-            osbEndPtVec.push_back(extendedPt);
+            obsOffsetPt(pathStart, p1, p2, &extendedPt);
+            if (clearPath(pathStart, extendedPt)) {
+                osbEndPtVec.push_back(extendedPt);
+            }
 
             // extend the obstacle (at p1 end) by 1/2 the vehicle width
-            obsSlope = getSlope(p2, p1);
-            makeLineEndPt(obsSlope, pathOffset, p1, &extendedPt);
-            osbEndPtVec.push_back(extendedPt);
+            obsOffsetPt(pathStart, p2, p1, &extendedPt);
+            if (clearPath(pathStart, extendedPt)) {
+                osbEndPtVec.push_back(extendedPt);
+            }
         }
 
         // osbEndPtVec now holds the vector of points we can directly
@@ -142,4 +142,46 @@ void plannerLow::bestPath(unsigned depth, point_t pathStart, point_t *pathTarget
         bg::assign_point(*pathTarget, ptMin);
     }
 return;
+}
+
+void plannerLow::obsOffsetPt(point_t pathStart, point_t obsEnd, point_t obsFarEnd, point_t *obsOffset){
+
+    float directSlope = getSlope(pathStart, obsEnd);
+    float offsetSlope = -1.0 / directSlope;
+
+    float offset = 0.55 * vehicleWidth; // just over 1/2.
+    float offsetH;
+    float offsetV;
+    float obsEndX = obsEnd.get<0>();
+    float obsEndY = obsEnd.get<1>();
+    float obsFarEndX = obsFarEnd.get<0>();
+    float obsFarEndY = obsFarEnd.get<1>();
+    float provX;
+    float provY;
+
+    
+    slopeDist2Cartsian(offsetSlope, offset, &offsetH, &offsetV);
+
+    provX = obsEndX + offsetH;
+    provY = obsEndY + offsetV;
+
+    if( isLeft(pathStart, obsEnd, obsFarEnd) ==
+        isLeft(pathStart, obsEnd, point_t(provX, provY) )){
+            provX = obsEndX - offsetH;
+            provY = obsEndY - offsetV;
+        }
+
+    obsOffset->set<0>(provX);
+    obsOffset->set<1>(provY);
+}
+
+bool plannerLow::clearPath(point_t pathStart, point_t extendedPt){
+
+    polygon_t pathPoly;
+    makeRectAroundSegment(pathStart, extendedPt, vehicleWidth, &pathPoly);
+    
+    std::vector<value_t> obsVec;
+    unsigned obsCount = obstacles->getInPolygon(pathPoly, &obsVec);
+
+    return (obsCount == 0);
 }

@@ -69,7 +69,17 @@ public:
     // collected and we based future planning on this new data.
 
     void bestPath(unsigned depth, point_t pathStart,point_t *pathTarget, float *score);
+    bool clearPath(point_t pathStart, point_t extendedPt);
 
+
+// private:
+
+    void obsOffsetPt(point_t pathStart, point_t obsEnd, point_t obsFarEnd, point_t *obsOffset);
+    // robot is sitting at "pathStart"
+    // robot needs to drive around "obsEnd"
+    // The other end of the obstacle, the end we are NOT driving aroubd is at "obsFarEnd"
+    // Compute and pass back the point, "obsoffset", that the robot should drive to so as
+    // not to collide with the obstacle.
 private:
     unsigned depthLimit;
     point_t curentLocation;

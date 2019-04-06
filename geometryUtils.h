@@ -35,7 +35,7 @@ typedef boost::shared_ptr<linestring_t> shp_t;
 typedef std::pair<box_t, shp_t> value_t;
 
 
-void slopeDist2Cartsian(float slope, float length, float* x, float* y);
+void slopeDist2Cartsian(float slope, float distance, float* x, float* y);
 /*! 
     Converts a slope and distance to (x,y).
 
@@ -51,5 +51,12 @@ void makeLineEndPt(float slope, float length, point_t startPt, point_t *endPt);
 float getSlope(point_t pt1, point_t pt2);
 
 void makeRectAroundSegment(point_t pt1, point_t pt2, float width, polygon_t *rect);
+
+// assuma a line AB.  If you stand on A and loob at B is point C to the left?
+// returns 1 if C is left, -1 if C is to the right
+//
+// The expression is zero if the point is colinear and is treated as being
+// "not to the left" and -1 is returned
+bool isLeft(point_t a, point_t b, point_t c);
 
 #endif /* GEOMETRYUTILS_H */

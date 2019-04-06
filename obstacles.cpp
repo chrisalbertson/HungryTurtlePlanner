@@ -26,6 +26,7 @@
 // Again, all instances of this call use the same STATIC data as there is
 // only one "real world" that needs to be represneted
 
+bgi::rtree< value_t, bgi::linear<16, 4> > ObstacleList::_rtree;
 
 void ObstacleList::add(point_t p1, point_t p2){
 
