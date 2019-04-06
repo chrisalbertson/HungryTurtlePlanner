@@ -149,7 +149,7 @@ void plannerLow::obsOffsetPt(point_t pathStart, point_t obsEnd, point_t obsFarEn
     float directSlope = getSlope(pathStart, obsEnd);
     float offsetSlope = -1.0 / directSlope;
 
-    float offset = 0.55 * vehicleWidth; // just over 1/2.
+    float offset = 0.75 * vehicleWidth; // over 1/2.
     float offsetH;
     float offsetV;
     float obsEndX = obsEnd.get<0>();
